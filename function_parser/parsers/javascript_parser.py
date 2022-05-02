@@ -31,6 +31,7 @@ class JavascriptParser(LanguageParser):
                 all_prev_comment_nodes.append(prev_sibling)
                 last_comment_start_line = prev_sibling.start_point[0]
                 prev_sibling = previous_sibling(tree, prev_sibling)
+                print(prev_sibling)
                 if prev_sibling.end_point[0] + 1 < last_comment_start_line:
                     break  # if there is an empty line, stop expanding.
 
