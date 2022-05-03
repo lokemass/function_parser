@@ -45,7 +45,7 @@ class DataProcessor:
         sha = None
 
         for f in files:
-            print("file:", f)
+            # print("file:", f)
             definitions = self.get_function_definitions(f)
             if definitions is None:
                 continue
