@@ -168,11 +168,11 @@ class DataProcessor:
         try:
             with open(filepath) as source_code:
                 blob = source_code.read()
-            print("tree Start time", time.time())
+            start = time.time()
             tree = DataProcessor.PARSER.parse(blob.encode())
             print("tree end time ->", time.time())
-            test_var = self.language_parser.get_definition(tree, blob) #time taken high
-            print("language_parser.get_definition end time ->", time.time())
+            test_var = self.language_parser.get_definition(tree, blob)  # time taken high
+            print("language_parser.get_definition end time ->", time.time(), "---", time.time() - start)
             return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
