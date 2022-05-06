@@ -10,7 +10,7 @@ Options:
     --tree-sitter-build FILE        [default: /src/build/py-tree-sitter-languages.so]
 """
 import functools
-from datetime import time
+import time
 from multiprocessing import Pool
 import pickle
 from os import PathLike
@@ -25,8 +25,8 @@ from function_parser.language_data import LANGUAGE_METADATA
 from function_parser.parsers.language_parser import LanguageParser, tokenize_docstring
 from function_parser.utils import download, get_sha, flatten, remap_nwo, walk
 
-class DataProcessor:
 
+class DataProcessor:
     PARSER = Parser()
 
     def __init__(self, language: str, language_parser: Type[LanguageParser]):
@@ -54,7 +54,8 @@ class DataProcessor:
                 sha = get_sha(tmp_dir, nwo)
 
             nwo, path, functions = definitions
-            indexes.extend((self.extract_function_data(func, nwo, path, sha) for func in functions if len(func['function_tokens']) > 1))
+            indexes.extend((self.extract_function_data(func, nwo, path, sha) for func in functions if
+                            len(func['function_tokens']) > 1))
         return indexes
 
     def process_dent(self, nwo, ext, library_candidates) -> Tuple[List[Dict[str, Any]], List[Tuple[str, str]]]:
@@ -94,12 +95,13 @@ class DataProcessor:
                     for depended_library_function in dependend_library_functions:
                         # Other potential filters: len(call['identifier']) > 6 or len(call['identifier'].split('_')) > 1
                         if (call['identifier'] not in self.language_parser.STOPWORDS and
-                            ((depended_library_function['identifier'].split('.')[-1] == '__init__' and
-                              call['identifier'] == depended_library_function['identifier'].split('.')[0]) or
-                             ((len(call['identifier']) > 9 or
-                               (not call['identifier'].startswith('_') and len(call['identifier'].split('_')) > 1)) and
-                              call['identifier'] == depended_library_function['identifier'])
-                            )):
+                                ((depended_library_function['identifier'].split('.')[-1] == '__init__' and
+                                  call['identifier'] == depended_library_function['identifier'].split('.')[0]) or
+                                 ((len(call['identifier']) > 9 or
+                                   (not call['identifier'].startswith('_') and len(
+                                       call['identifier'].split('_')) > 1)) and
+                                  call['identifier'] == depended_library_function['identifier'])
+                                )):
                             dent = {
                                 'nwo': nwo,
                                 'sha': sha,
@@ -120,10 +122,11 @@ class DataProcessor:
         if definitions is None:
             return []
         _, _, functions = definitions
-        print("return stmt",time().second)
+        print("return stmt", time.time())
         return [self.extract_function_data(func, '', '', '') for func in functions if len(func['function_tokens']) > 1]
 
     def extract_function_data(self, function: Dict[str, Any], nwo, path: str, sha: str):
+        print("extracted", time.time())
         return {
             'nwo': nwo,
             'sha': sha,
@@ -150,7 +153,9 @@ class DataProcessor:
         try:
             with open(filepath) as source_code:
                 blob = source_code.read()
+            print("get_context_and_function_calls", time.time())
             tree = DataProcessor.PARSER.parse(blob.encode())
+            print("tree done", time.time())
             return (nwo, path, self.language_parser.get_context(tree, blob), self.language_parser.get_calls(tree, blob))
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
@@ -163,10 +168,9 @@ class DataProcessor:
         try:
             with open(filepath) as source_code:
                 blob = source_code.read()
-            start_time = time().second
-            print("tree Start time", start_time)
+            print("tree Start time", time.time())
             tree = DataProcessor.PARSER.parse(blob.encode())
-            print("tree end time ->", time().second)
+            print("tree end time ->", time.time())
             return (nwo, path, self.language_parser.get_definition(tree, blob))
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
@@ -175,14 +179,20 @@ class DataProcessor:
 if __name__ == '__main__':
     args = docopt(__doc__)
 
-    repository_dependencies = pd.read_csv(args['INPUT_DIR'] + 'repository_dependencies-1.4.0-2018-12-22.csv', index_col=False)
+    repository_dependencies = pd.read_csv(args['INPUT_DIR'] + 'repository_dependencies-1.4.0-2018-12-22.csv',
+                                          index_col=False)
     projects = pd.read_csv(args['INPUT_DIR'] + 'projects_with_repository_fields-1.4.0-2018-12-22.csv', index_col=False)
 
-    repository_dependencies['Manifest Platform'] = repository_dependencies['Manifest Platform'].apply(lambda x: x.lower())
-    id_to_nwo = {project['ID']: project['Repository Name with Owner'] for project in projects[['ID', 'Repository Name with Owner']].dropna().to_dict(orient='records')}
-    nwo_to_name = {project['Repository Name with Owner']: project['Name'] for project in projects[['Repository Name with Owner', 'Name']].dropna().to_dict(orient='records')}
+    repository_dependencies['Manifest Platform'] = repository_dependencies['Manifest Platform'].apply(
+        lambda x: x.lower())
+    id_to_nwo = {project['ID']: project['Repository Name with Owner'] for project in
+                 projects[['ID', 'Repository Name with Owner']].dropna().to_dict(orient='records')}
+    nwo_to_name = {project['Repository Name with Owner']: project['Name'] for project in
+                   projects[['Repository Name with Owner', 'Name']].dropna().to_dict(orient='records')}
 
-    filtered = repository_dependencies[(repository_dependencies['Host Type'] == 'GitHub') & (repository_dependencies['Manifest Platform'] == LANGUAGE_METADATA[args['--language']]['platform'])][['Repository Name with Owner', 'Dependency Project ID']].dropna().to_dict(orient='records')
+    filtered = repository_dependencies[(repository_dependencies['Host Type'] == 'GitHub') & (
+                repository_dependencies['Manifest Platform'] == LANGUAGE_METADATA[args['--language']]['platform'])][
+        ['Repository Name with Owner', 'Dependency Project ID']].dropna().to_dict(orient='records')
 
     dependency_pairs = [(rd['Repository Name with Owner'], id_to_nwo[int(rd['Dependency Project ID'])])
                         for rd in filtered if int(rd['Dependency Project ID']) in id_to_nwo]
@@ -214,7 +224,8 @@ if __name__ == '__main__':
         valid_nwos = dict([(l[0], l[3]) for l in license_filter])
 
         # Sort function definitions with repository popularity
-        definitions = [dict(list(d.items()) + [('score', valid_nwos[d['nwo']])]) for d in definitions if d['nwo'] in valid_nwos]
+        definitions = [dict(list(d.items()) + [('score', valid_nwos[d['nwo']])]) for d in definitions if
+                       d['nwo'] in valid_nwos]
         definitions = sorted(definitions, key=lambda x: -x['score'])
 
         # dedupe
