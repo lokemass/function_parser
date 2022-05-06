@@ -10,6 +10,7 @@ Options:
     --tree-sitter-build FILE        [default: /src/build/py-tree-sitter-languages.so]
 """
 import functools
+from datetime import time
 from multiprocessing import Pool
 import pickle
 from os import PathLike
@@ -162,7 +163,10 @@ class DataProcessor:
         try:
             with open(filepath) as source_code:
                 blob = source_code.read()
+            start_time = time().second
+            print(start_time)
             tree = DataProcessor.PARSER.parse(blob.encode())
+            print("end time ->", start_time-time().second)
             return (nwo, path, self.language_parser.get_definition(tree, blob))
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
