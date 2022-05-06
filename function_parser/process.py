@@ -120,7 +120,7 @@ class DataProcessor:
         if definitions is None:
             return []
         _, _, functions = definitions
-        print("return stmt",time.second)
+        print("return stmt",time().second)
         return [self.extract_function_data(func, '', '', '') for func in functions if len(func['function_tokens']) > 1]
 
     def extract_function_data(self, function: Dict[str, Any], nwo, path: str, sha: str):
