@@ -119,11 +119,11 @@ class DataProcessor:
 
     def process_single_file(self, filepath: PathLike) -> List[Dict[str, Any]]:
         definitions = self.get_function_definitions(filepath)
-        print("get_function_definitions done", time.time())
+        # print("get_function_definitions done", time.time())
         if definitions is None:
             return []
         _, _, functions = definitions
-        print("return stmt", time.time())
+        # print("return stmt", time.time())
         return [self.extract_function_data(func, '', '', '') for func in functions if len(func['function_tokens']) > 1]
 
     def extract_function_data(self, function: Dict[str, Any], nwo, path: str, sha: str):
@@ -153,9 +153,9 @@ class DataProcessor:
         try:
             with open(filepath) as source_code:
                 blob = source_code.read()
-            print("get_context_and_function_calls", time.time())
+            # print("get_context_and_function_calls", time.time())
             tree = DataProcessor.PARSER.parse(blob.encode())
-            print("tree done", time.time())
+            # print("tree done", time.time())
             return (nwo, path, self.language_parser.get_context(tree, blob), self.language_parser.get_calls(tree, blob))
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
@@ -168,11 +168,11 @@ class DataProcessor:
         try:
             with open(filepath) as source_code:
                 blob = source_code.read()
-            start = time.time()
+            # start = time.time()
             tree = DataProcessor.PARSER.parse(blob.encode())
-            print("tree end time ->", time.time())
+            # print("tree end time ->", time.time())
             test_var = self.language_parser.get_definition(tree, blob)  # time taken high
-            print("language_parser.get_definition end time ->", time.time(), "---", time.time() - start)
+            # print("language_parser.get_definition end time ->", time.time(), "---", time.time() - start)
             return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
