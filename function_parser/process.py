@@ -172,7 +172,9 @@ class DataProcessor:
             print("tree Start time", time.time())
             tree = DataProcessor.PARSER.parse(blob.encode())
             print("tree end time ->", time.time())
-            return (nwo, path, self.language_parser.get_definition(tree, blob))
+            test_var = self.language_parser.get_definition(tree, blob)
+            print("language_parser.get_definition end time ->", time.time())
+            return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
 
@@ -192,7 +194,7 @@ if __name__ == '__main__':
                    projects[['Repository Name with Owner', 'Name']].dropna().to_dict(orient='records')}
 
     filtered = repository_dependencies[(repository_dependencies['Host Type'] == 'GitHub') & (
-                repository_dependencies['Manifest Platform'] == LANGUAGE_METADATA[args['--language']]['platform'])][
+            repository_dependencies['Manifest Platform'] == LANGUAGE_METADATA[args['--language']]['platform'])][
         ['Repository Name with Owner', 'Dependency Project ID']].dropna().to_dict(orient='records')
 
     dependency_pairs = [(rd['Repository Name with Owner'], id_to_nwo[int(rd['Dependency Project ID'])])
