@@ -119,6 +119,7 @@ class DataProcessor:
 
     def process_single_file(self, filepath: PathLike) -> List[Dict[str, Any]]:
         definitions = self.get_function_definitions(filepath)
+        print("get_function_definitions done", time.time())
         if definitions is None:
             return []
         _, _, functions = definitions
