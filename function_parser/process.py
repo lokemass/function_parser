@@ -127,7 +127,6 @@ class DataProcessor:
         return [self.extract_function_data(func, '', '', '') for func in functions if len(func['function_tokens']) > 1]
 
     def extract_function_data(self, function: Dict[str, Any], nwo, path: str, sha: str):
-        print("extracted", time.time())
         return {
             'nwo': nwo,
             'sha': sha,
@@ -172,7 +171,7 @@ class DataProcessor:
             print("tree Start time", time.time())
             tree = DataProcessor.PARSER.parse(blob.encode())
             print("tree end time ->", time.time())
-            test_var = self.language_parser.get_definition(tree, blob)
+            test_var = self.language_parser.get_definition(tree, blob) #time taken high
             print("language_parser.get_definition end time ->", time.time())
             return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
