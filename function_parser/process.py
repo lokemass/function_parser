@@ -45,7 +45,7 @@ class DataProcessor:
         files = walk(tmp_dir, ext)
         # files = glob.iglob(tmp_dir.name + '/**/*.{}'.format(ext), recursive=True)
         sha = None
-
+        start = time.time()
         for f in files:
             # print("file:", f)
             definitions = self.get_function_definitions(f)
@@ -57,6 +57,7 @@ class DataProcessor:
             nwo, path, functions = definitions
             indexes.extend((self.extract_function_data(func, nwo, path, sha) for func in functions if
                             len(func['function_tokens']) > 1))
+        print("function definition time taken", time.time()-start)
         return indexes
 
     def process_dent(self, nwo, ext, library_candidates) -> Tuple[List[Dict[str, Any]], List[Tuple[str, str]]]:
@@ -167,9 +168,9 @@ class DataProcessor:
         if any(fp in path.lower() for fp in self.language_parser.FILTER_PATHS):
             return None
         try:
+            start = time.time()
             with open(filepath) as source_code:
                 blob = source_code.read()
-            # start = time.time()
             tree = DataProcessor.PARSER.parse(blob.encode())
             # print("tree end time ->", time.time())
             test_var = self.language_parser.get_definition(tree, blob)  # time taken high
