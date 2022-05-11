@@ -1,3 +1,4 @@
+import time
 from typing import List, Dict, Any
 
 from function_parser.parsers.language_parser import LanguageParser, match_from_span, tokenize_code, traverse_type, previous_sibling, \
@@ -43,13 +44,14 @@ class JavascriptParser(LanguageParser):
     def get_definition(tree, blob: str) -> List[Dict[str, Any]]:
         function_nodes = []
         functions = []
+        start = time.time()
         traverse_type(tree.root_node, function_nodes, 'function')
         for function in function_nodes:
             if function.children is None or len(function.children) == 0:
                 continue
             parent_node = node_parent(tree, function)
             functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
-
+        print("for loop ended function", time.time()-start)
         definitions = []
         for node_type, function_node, docstring in functions:
             metadata = JavascriptParser.get_function_metadata(function_node, blob)
@@ -68,6 +70,7 @@ class JavascriptParser(LanguageParser):
                 'start_point': function_node.start_point,
                 'end_point': function_node.end_point     
             })
+            print("ended definition", time.time()-start)
         return definitions
 
 
