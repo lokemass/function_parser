@@ -47,7 +47,7 @@ class DataProcessor:
         sha = None
         start = time.time()
         for f in files:
-            print("time taken for  a file", time.time()-start)
+
             print("file:", f)
             definitions = self.get_function_definitions(f)
             if definitions is None:
@@ -58,7 +58,8 @@ class DataProcessor:
             nwo, path, functions = definitions
             indexes.extend((self.extract_function_data(func, nwo, path, sha) for func in functions if
                             len(func['function_tokens']) > 1))
-        print("function definition time taken", time.time()-start)
+            print("time taken for a file", time.time() - start)
+        print("DataProcessor.process_dee end time", time.time()-start)
         return indexes
 
     def process_dent(self, nwo, ext, library_candidates) -> Tuple[List[Dict[str, Any]], List[Tuple[str, str]]]:
@@ -170,13 +171,16 @@ class DataProcessor:
             return None
         try:
             start = time.time()
-            # print("parser time=", time.time()-start)
             with open(filepath) as source_code:
                 blob = source_code.read()
+            print("file open time ->", time.time()-start)
+            tree_start = time.time()
+            # print("start time=", time.time()-start)
             tree = DataProcessor.PARSER.parse(blob.encode())
-            # print("tree end time ->", time.time())
+            print("AST-tree building time->", time.time()-tree_start)
+            function_def_start = time.time()
             test_var = self.language_parser.get_definition(tree, blob)  # time taken high
-            # print("language_parser.get_definition end time ->", time.time(), "---", time.time() - start)
+            print("language_parser.get_definition end time ->", time.time() - function_def_start)
             return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None
