@@ -180,7 +180,7 @@ class DataProcessor:
             print("AST-tree building time->", time.time()-tree_start)
             function_def_start = time.time()
             test_var = self.language_parser.get_definition(tree, blob)  # time taken high
-            print("language_parser.get_definition end time ->", time.time() - function_def_start)
+            print("language_parser.get_definition processing time ->", time.time() - function_def_start)
             return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None

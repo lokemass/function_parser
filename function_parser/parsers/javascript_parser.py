@@ -14,6 +14,7 @@ class JavascriptParser(LanguageParser):
 
     @staticmethod
     def get_docstring(tree, node, blob: str) -> str:
+        doc_time=time.time()
         docstring = ''
         parent_node = node_parent(tree, node)
 
@@ -23,7 +24,7 @@ class JavascriptParser(LanguageParser):
             base_node = parent_node  # This is a common pattern where a function is assigned as a value to a dictionary.
         else:
             base_node = node
-
+        previous_sibling_time=time.time()
         prev_sibling = previous_sibling(tree, base_node)
         if prev_sibling is not None and prev_sibling.type == 'comment':
             all_prev_comment_nodes = [prev_sibling]
@@ -36,8 +37,10 @@ class JavascriptParser(LanguageParser):
                     break
                 if prev_sibling.end_point[0] + 1 < last_comment_start_line:
                     break  # if there is an empty line, stop expanding.
-
+            print("previous sibling processing time", time.time()-previous_sibling_time)
             docstring = ' '.join((strip_c_style_comment_delimiters(match_from_span(s, blob)) for s in all_prev_comment_nodes[::-1]))
+
+        print("get docstring time ->", time.time() - doc_time)
         return docstring
         
     @staticmethod
@@ -56,8 +59,9 @@ class JavascriptParser(LanguageParser):
                 parent_node = node_parent(tree, function)
                 functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
         #     print("for loop function iteration = ", time.time() - start)
-        print("get_definition_function_loop= ", time.time()-get_definition_function_loop)
+        print("get_definition_function_loop processing time= ", time.time()-get_definition_function_loop)
         definitions = []
+        meta_start = time.time()
         for node_type, function_node, docstring in functions:
             metadata = JavascriptParser.get_function_metadata(function_node, blob)
             docstring_summary = get_docstring_summary(docstring)
@@ -75,7 +79,7 @@ class JavascriptParser(LanguageParser):
                 'start_point': function_node.start_point,
                 'end_point': function_node.end_point     
             })
-        # print("ended definition = ", time.time()-start)
+        print("function metadata processing time -> ", time.time()-meta_start)
         return definitions
 
 
