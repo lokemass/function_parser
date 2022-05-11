@@ -169,6 +169,7 @@ class DataProcessor:
             return None
         try:
             start = time.time()
+            # print("parser time=", time.time()-start)
             with open(filepath) as source_code:
                 blob = source_code.read()
             tree = DataProcessor.PARSER.parse(blob.encode())

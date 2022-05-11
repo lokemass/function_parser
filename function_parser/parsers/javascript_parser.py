@@ -73,7 +73,7 @@ class JavascriptParser(LanguageParser):
                 'start_point': function_node.start_point,
                 'end_point': function_node.end_point     
             })
-        print("ended definition = ", time.time()-start)
+        # print("ended definition = ", time.time()-start)
         return definitions
 
 
