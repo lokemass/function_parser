@@ -49,7 +49,7 @@ def previous_sibling(tree, node):
 def node_parent(tree, node):
     # global time
     to_visit = [tree.root_node]
-    print("root node", to_visit)
+    # print("root node", to_visit)
     while len(to_visit) > 0:
         next_node = to_visit.pop()
         for child in next_node.children:
