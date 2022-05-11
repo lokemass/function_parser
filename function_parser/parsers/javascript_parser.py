@@ -37,10 +37,10 @@ class JavascriptParser(LanguageParser):
                     break
                 if prev_sibling.end_point[0] + 1 < last_comment_start_line:
                     break  # if there is an empty line, stop expanding.
-            print("previous sibling processing time", time.time()-previous_sibling_time)
+            # print("previous sibling processing time", time.time()-previous_sibling_time)
             docstring = ' '.join((strip_c_style_comment_delimiters(match_from_span(s, blob)) for s in all_prev_comment_nodes[::-1]))
 
-        print("get docstring time ->", time.time() - doc_time)
+        # print("get docstring time ->", time.time() - doc_time)
         return docstring
         
     @staticmethod
