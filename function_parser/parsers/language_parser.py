@@ -52,14 +52,12 @@ def node_parent(tree, node):
     print("root node", to_visit)
     while len(to_visit) > 0:
         next_node = to_visit.pop()
-        root_time = time.time()
         for child in next_node.children:
             if nodes_are_equal(child, node):
                 return next_node
 
         else:
             to_visit.extend(next_node.children)
-        print("node_parent/child processing time ->", time.time()-root_time)
     raise ValueError("Could not find node in tree.")
 
 
