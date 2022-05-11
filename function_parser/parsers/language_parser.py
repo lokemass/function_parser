@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Set, Optional
-
+import time
 DOCSTRING_REGEX_TOKENIZER = re.compile(r"[^\s,'\"`.():\[\]=*;>{\}+-/\\]+|\\+|\.+|\(\)|{\}|\[\]|\(+|\)+|:+|\[+|\]+|{+|\}+|=+|\*+|;+|>+|\++|-+|/+")
 
 
@@ -47,14 +47,19 @@ def previous_sibling(tree, node):
 
 
 def node_parent(tree, node):
+    # global time
     to_visit = [tree.root_node]
+    print("root node", to_visit)
     while len(to_visit) > 0:
         next_node = to_visit.pop()
+        root_time = time.time()
         for child in next_node.children:
             if nodes_are_equal(child, node):
                 return next_node
+
         else:
             to_visit.extend(next_node.children)
+        print("node_parent/child processing time ->", time.time()-root_time)
     raise ValueError("Could not find node in tree.")
 
 

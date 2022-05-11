@@ -56,13 +56,16 @@ class JavascriptParser(LanguageParser):
             if function.children is None or len(function.children) == 0:
                 continue
             else:
+                parent_node_time=time.time()
                 parent_node = node_parent(tree, function)
+                print("parent node processing time", time.time()-parent_node_time)
                 functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
         #     print("for loop function iteration = ", time.time() - start)
         print("get_definition_function_loop processing time= ", time.time()-get_definition_function_loop)
         definitions = []
         meta_start = time.time()
         for node_type, function_node, docstring in functions:
+
             metadata = JavascriptParser.get_function_metadata(function_node, blob)
             docstring_summary = get_docstring_summary(docstring)
 
@@ -79,12 +82,13 @@ class JavascriptParser(LanguageParser):
                 'start_point': function_node.start_point,
                 'end_point': function_node.end_point     
             })
-        print("function metadata processing time -> ", time.time()-meta_start)
+        print("metadata processing time -> ", time.time()-meta_start)
         return definitions
 
 
     @staticmethod
     def get_function_metadata(function_node, blob: str) -> Dict[str, str]:
+        meta_time = time.time()
         metadata = {
             'identifier': '',
             'parameters': '',
@@ -95,4 +99,5 @@ class JavascriptParser(LanguageParser):
             metadata['identifier'] = match_from_span(identifier_nodes[0], blob)
         if formal_parameters_nodes:
             metadata['parameters'] = match_from_span(formal_parameters_nodes[0], blob)
+        print("get_function_metadata processing time", time.time()-meta_time)
         return metadata
