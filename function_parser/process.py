@@ -47,7 +47,8 @@ class DataProcessor:
         sha = None
         start = time.time()
         for f in files:
-            # print("file:", f)
+            print("time taken for  a file", time.time()-start)
+            print("file:", f)
             definitions = self.get_function_definitions(f)
             if definitions is None:
                 continue
