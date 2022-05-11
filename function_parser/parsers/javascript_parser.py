@@ -52,7 +52,8 @@ class JavascriptParser(LanguageParser):
                 continue
             parent_node = node_parent(tree, function)
             functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
-        print("for loop ended function", time.time()-start)
+            print("for loop function iteration = ", time.time() - start)
+        print("for loop ended function = ", time.time()-start)
         definitions = []
         for node_type, function_node, docstring in functions:
             metadata = JavascriptParser.get_function_metadata(function_node, blob)
@@ -71,7 +72,7 @@ class JavascriptParser(LanguageParser):
                 'start_point': function_node.start_point,
                 'end_point': function_node.end_point     
             })
-        print("ended definition", time.time()-start)
+        print("ended definition = ", time.time()-start)
         return definitions
 
 
