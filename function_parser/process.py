@@ -41,13 +41,12 @@ class DataProcessor:
             return indexes
         start = time.time()
         tmp_dir = download(nwo)
-        print("download", time.time() - start)
+        print("download time", time.time() - start)
         files = walk(tmp_dir, ext)
         # files = glob.iglob(tmp_dir.name + '/**/*.{}'.format(ext), recursive=True)
         sha = None
         start = time.time()
         for f in files:
-
             print("file:", f)
             definitions = self.get_function_definitions(f)
             if definitions is None:
