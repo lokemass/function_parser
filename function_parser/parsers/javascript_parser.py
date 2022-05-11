@@ -50,8 +50,9 @@ class JavascriptParser(LanguageParser):
         for function in function_nodes:
             if function.children is None or len(function.children) == 0:
                 continue
-            parent_node = node_parent(tree, function)
-            functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
+            else:
+                parent_node = node_parent(tree, function)
+                functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
             print("for loop function iteration = ", time.time() - start)
         print("for loop ended function = ", time.time()-start)
         definitions = []
