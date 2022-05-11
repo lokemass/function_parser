@@ -46,6 +46,7 @@ class JavascriptParser(LanguageParser):
         functions = []
         start = time.time()
         traverse_type(tree.root_node, function_nodes, 'function')
+        print("for loop started ", time.time()-start)
         for function in function_nodes:
             if function.children is None or len(function.children) == 0:
                 continue
