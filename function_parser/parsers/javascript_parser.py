@@ -48,12 +48,12 @@ class JavascriptParser(LanguageParser):
         traverse_type(tree.root_node, function_nodes, 'function')
         print("for loop started function", time.time()-start)
         for function in function_nodes:
-            if function.children is None or len(function.children) == 0:
-                continue
-            else:
-                parent_node = node_parent(tree, function)
-                functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
-            print("for loop function iteration = ", time.time() - start)
+            # if function.children is None or len(function.children) == 0:
+            #     continue
+            # else:
+            parent_node = node_parent(tree, function)
+            functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
+            # print("for loop function iteration = ", time.time() - start)
         print("for loop ended function = ", time.time()-start)
         definitions = []
         for node_type, function_node, docstring in functions:
