@@ -1,3 +1,4 @@
+import time
 from typing import List, Dict, Any
 
 from function_parser.parsers.language_parser import LanguageParser, match_from_span, tokenize_code, traverse_type
@@ -16,8 +17,11 @@ class JavaParser(LanguageParser):
 
         definitions = []
         for _class in classes:
+            get_definition_function_loop = time.time()
             class_identifier = match_from_span([child for child in _class.children if child.type == 'identifier'][0], blob).strip()
+            print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
             for child in (child for child in _class.children if child.type == 'class_body'):
+                meta_start = time.time()
                 for idx, node in enumerate(child.children):
                     if node.type == 'method_declaration':
                         if JavaParser.is_method_body_empty(node):
@@ -42,6 +46,7 @@ class JavaParser(LanguageParser):
                             'start_point': node.start_point,
                             'end_point': node.end_point
                         })
+                print("metadata processing time -> ", time.time() - meta_start)
         return definitions
 
     @staticmethod
