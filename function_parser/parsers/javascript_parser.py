@@ -72,17 +72,18 @@ class JavascriptParser(LanguageParser):
 
             if metadata['identifier'] in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
                 continue
-            definitions.append({
-                'type': node_type,
-                'identifier': metadata['identifier'],
-                'parameters': metadata['parameters'],
-                'function': match_from_span(function_node, blob),
-                'function_tokens': tokenize_code(function_node, blob),
-                'docstring': docstring,
-                'docstring_summary': docstring_summary,
-                'start_point': function_node.start_point,
-                'end_point': function_node.end_point
-            })
+            else:
+                definitions.append({
+                    'type': node_type,
+                    'identifier': metadata['identifier'],
+                    'parameters': metadata['parameters'],
+                    'function': match_from_span(function_node, blob),
+                    'function_tokens': tokenize_code(function_node, blob),
+                    'docstring': docstring,
+                    'docstring_summary': docstring_summary,
+                    'start_point': function_node.start_point,
+                    'end_point': function_node.end_point
+                })
         print("metadata processing time -> ", time.time() - meta_start)
         return definitions
 
