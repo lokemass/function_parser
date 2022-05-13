@@ -96,6 +96,7 @@ class JavascriptParser(LanguageParser):
         # print("get_definition.traverse_type", time.time() - start)
         # print("for loop started function", time.time()-start)
         get_definition_function_loop = time.time()
+        print("function nodes", function_nodes)
         for function in function_nodes:
             if function.children is None or len(function.children) == 0:
                 continue
