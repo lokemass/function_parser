@@ -19,7 +19,7 @@ class JavaParser(LanguageParser):
         for _class in classes:
             get_definition_function_loop = time.time()
             class_identifier = match_from_span([child for child in _class.children if child.type == 'identifier'][0], blob).strip()
-            print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
+            # print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
             for child in (child for child in _class.children if child.type == 'class_body'):
                 meta_start = time.time()
                 for idx, node in enumerate(child.children):
@@ -46,7 +46,7 @@ class JavaParser(LanguageParser):
                             'start_point': node.start_point,
                             'end_point': node.end_point
                         })
-                print("metadata processing time -> ", time.time() - meta_start)
+                # print("metadata processing time -> ", time.time() - meta_start)
         return definitions
 
     @staticmethod
