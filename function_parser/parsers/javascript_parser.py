@@ -26,7 +26,9 @@ class JavascriptParser(LanguageParser):
             base_node = node
         previous_sibling_time = time.time()
         prev_sibling = previous_sibling(tree, base_node)
-        if prev_sibling is not None and prev_sibling.type == 'comment':
+        if prev_sibling is None:
+            pass
+        elif prev_sibling.type == 'comment':
             all_prev_comment_nodes = [prev_sibling]
             prev_sibling = previous_sibling(tree, prev_sibling)
             while prev_sibling is not None and prev_sibling.type == 'comment':
