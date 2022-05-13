@@ -107,8 +107,9 @@ class JavascriptParser(LanguageParser):
                 metadata = JavascriptParser.get_function_metadata(function_node, blob)
                 docstring_summary = get_docstring_summary(docstring)
 
-                if metadata['identifier'] not in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
-                    # continue
+                if metadata['identifier']  in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
+                    continue
+                else:
                     definitions.append({
                         'type': node_type,
                         'identifier': metadata['identifier'],
@@ -120,7 +121,7 @@ class JavascriptParser(LanguageParser):
                         'start_point': function_node.start_point,
                         'end_point': function_node.end_point
                     })
-                print("Function name =", metadata['identifier'])
+                    print("Function name =", metadata['identifier'])
         return definitions
 
     @staticmethod
