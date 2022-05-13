@@ -102,9 +102,7 @@ class JavascriptParser(LanguageParser):
                 continue
             else:
                 parent_node = node_parent(tree, function)
-                node_type, function_node, docstring = parent_node.type, function, JavascriptParser.get_docstring(tree,
-                                                                                                                 function,
-                                                                                                                 blob)
+                node_type, function_node, docstring = parent_node.type, function, ''
                 metadata = JavascriptParser.get_function_metadata(function_node, blob)
                 docstring_summary = get_docstring_summary(docstring)
 
