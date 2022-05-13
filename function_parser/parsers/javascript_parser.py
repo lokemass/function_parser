@@ -93,7 +93,7 @@ class JavascriptParser(LanguageParser):
         # functions = []
         start = time.time()
         traverse_type(tree.root_node, function_nodes, 'function')
-        print("get_definition.traverse_type", time.time() - start)
+        # print("get_definition.traverse_type", time.time() - start)
         # print("for loop started function", time.time()-start)
         get_definition_function_loop = time.time()
         for function in function_nodes:
@@ -121,7 +121,7 @@ class JavascriptParser(LanguageParser):
                         'start_point': function_node.start_point,
                         'end_point': function_node.end_point
                     })
-                    print("Function name =", metadata['identifier'])
+                    # print("Function name =", metadata['identifier'])
         return definitions
 
     @staticmethod
