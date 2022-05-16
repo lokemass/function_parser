@@ -60,6 +60,8 @@ class JavascriptParser(LanguageParser):
                 parent_node_time = time.time()
                 parent_node = node_parent(tree, function)
                 # print("parent node processing time", time.time() - parent_node_time)
+                print("Parent node", parent_node.getText())
+                print("parent Type", parent_node.type)
                 functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
         #     print("for loop function iteration = ", time.time() - start)
         print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
@@ -84,6 +86,7 @@ class JavascriptParser(LanguageParser):
                 'end_point': function_node.end_point
             })
         print("metadata processing time -> ", time.time() - meta_start)
+        print("Definitions", definitions)
         return definitions
 
     # @staticmethod
@@ -137,4 +140,5 @@ class JavascriptParser(LanguageParser):
         if formal_parameters_nodes:
             metadata['parameters'] = match_from_span(formal_parameters_nodes[0], blob)
         print("get_function_metadata processing time", time.time() - meta_time)
+        print("meta data", metadata)
         return metadata
