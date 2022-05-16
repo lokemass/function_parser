@@ -50,7 +50,7 @@ class JavascriptParser(LanguageParser):
         functions = []
         start = time.time()
         traverse_type(tree.root_node, function_nodes, 'function')
-        print("get_definition.traverse_type", time.time() - start)
+        # print("get_definition.traverse_type", time.time() - start)
         # print("for loop started function", time.time()-start)
         get_definition_function_loop = time.time()
         for function in function_nodes:
@@ -59,7 +59,7 @@ class JavascriptParser(LanguageParser):
             else:
                 parent_node_time = time.time()
                 parent_node = node_parent(tree, function)
-                print("parent node processing time", time.time() - parent_node_time)
+                # print("parent node processing time", time.time() - parent_node_time)
                 functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
         #     print("for loop function iteration = ", time.time() - start)
         print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
