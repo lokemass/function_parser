@@ -138,6 +138,6 @@ class JavascriptParser(LanguageParser):
             metadata['identifier'] = match_from_span(identifier_nodes[0], blob)
         if formal_parameters_nodes:
             metadata['parameters'] = match_from_span(formal_parameters_nodes[0], blob)
-        print("get_function_metadata processing time", time.time() - meta_time)
-        print("meta data", metadata)
+        # print("get_function_metadata processing time", time.time() - meta_time)
+        # print("meta data", metadata)
         return metadata
