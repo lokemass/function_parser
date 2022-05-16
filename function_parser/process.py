@@ -176,7 +176,7 @@ class DataProcessor:
             tree_start = time.time()
             # print("start time=", time.time()-start)
             tree = DataProcessor.PARSER.parse(blob.encode())
-            print("AST-tree building time->", time.time()-tree_start)
+            # print("AST-tree building time->", time.time()-tree_start)
             print("tree:-", tree.root_node.children)
             function_def_start = time.time()
             test_var = self.language_parser.get_definition(tree, blob)  # time taken high

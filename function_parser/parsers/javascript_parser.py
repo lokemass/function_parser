@@ -44,84 +44,84 @@ class JavascriptParser(LanguageParser):
         # print("get docstring time ->", time.time() - doc_time)
         return docstring
 
-    # @staticmethod
-    # def get_definition(tree, blob: str) -> List[Dict[str, Any]]:
-    #     function_nodes = []
-    #     functions = []
-    #     start = time.time()
-    #     traverse_type(tree.root_node, function_nodes, 'function')
-    #     print("get_definition.traverse_type", time.time() - start)
-    #     # print("for loop started function", time.time()-start)
-    #     get_definition_function_loop = time.time()
-    #     for function in function_nodes:
-    #         if function.children is None or len(function.children) == 0:
-    #             continue
-    #         else:
-    #             parent_node_time = time.time()
-    #             parent_node = node_parent(tree, function)
-    #             print("parent node processing time", time.time() - parent_node_time)
-    #             functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
-    #     #     print("for loop function iteration = ", time.time() - start)
-    #     print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
-    #     definitions = []
-    #     meta_start = time.time()
-    #     for node_type, function_node, docstring in functions:
-    #
-    #         metadata = JavascriptParser.get_function_metadata(function_node, blob)
-    #         docstring_summary = get_docstring_summary(docstring)
-    #
-    #         if metadata['identifier'] in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
-    #             continue
-    #         definitions.append({
-    #             'type': node_type,
-    #             'identifier': metadata['identifier'],
-    #             'parameters': metadata['parameters'],
-    #             'function': match_from_span(function_node, blob),
-    #             'function_tokens': tokenize_code(function_node, blob),
-    #             'docstring': docstring,
-    #             'docstring_summary': docstring_summary,
-    #             'start_point': function_node.start_point,
-    #             'end_point': function_node.end_point
-    #         })
-    #     print("metadata processing time -> ", time.time() - meta_start)
-    #     return definitions
-
     @staticmethod
     def get_definition(tree, blob: str) -> List[Dict[str, Any]]:
         function_nodes = []
-        definitions = []
-        # functions = []
+        functions = []
         start = time.time()
         traverse_type(tree.root_node, function_nodes, 'function')
-        # print("get_definition.traverse_type", time.time() - start)
+        print("get_definition.traverse_type", time.time() - start)
         # print("for loop started function", time.time()-start)
         get_definition_function_loop = time.time()
-        print("function nodes", function_nodes)
         for function in function_nodes:
             if function.children is None or len(function.children) == 0:
                 continue
             else:
+                parent_node_time = time.time()
                 parent_node = node_parent(tree, function)
-                node_type, function_node, docstring = parent_node.type, function, ''
-                metadata = JavascriptParser.get_function_metadata(function_node, blob)
-                docstring_summary = get_docstring_summary(docstring)
+                print("parent node processing time", time.time() - parent_node_time)
+                functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
+        #     print("for loop function iteration = ", time.time() - start)
+        print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
+        definitions = []
+        meta_start = time.time()
+        for node_type, function_node, docstring in functions:
 
-                if metadata['identifier'] in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
-                    continue
-                else:
-                    definitions.append({
-                        'type': node_type,
-                        'identifier': metadata['identifier'],
-                        'parameters': metadata['parameters'],
-                        'function': match_from_span(function_node, blob),
-                        'function_tokens': tokenize_code(function_node, blob),
-                        'docstring': docstring,
-                        'docstring_summary': docstring_summary,
-                        'start_point': function_node.start_point,
-                        'end_point': function_node.end_point
-                    })
-                    # print("Function name =", metadata['identifier'])
+            metadata = JavascriptParser.get_function_metadata(function_node, blob)
+            docstring_summary = get_docstring_summary(docstring)
+
+            if metadata['identifier'] in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
+                continue
+            definitions.append({
+                'type': node_type,
+                'identifier': metadata['identifier'],
+                'parameters': metadata['parameters'],
+                'function': match_from_span(function_node, blob),
+                'function_tokens': tokenize_code(function_node, blob),
+                'docstring': docstring,
+                'docstring_summary': docstring_summary,
+                'start_point': function_node.start_point,
+                'end_point': function_node.end_point
+            })
+        print("metadata processing time -> ", time.time() - meta_start)
         return definitions
+
+    # @staticmethod
+    # def get_definition(tree, blob: str) -> List[Dict[str, Any]]:
+    #     function_nodes = []
+    #     definitions = []
+    #     # functions = []
+    #     start = time.time()
+    #     traverse_type(tree.root_node, function_nodes, 'function')
+    #     # print("get_definition.traverse_type", time.time() - start)
+    #     # print("for loop started function", time.time()-start)
+    #     get_definition_function_loop = time.time()
+    #     print("function nodes", function_nodes)
+    #     for function in function_nodes:
+    #         if function.children is None or len(function.children) == 0:
+    #             continue
+    #         else:
+    #             parent_node = node_parent(tree, function)
+    #             node_type, function_node, docstring = parent_node.type, function, ''
+    #             metadata = JavascriptParser.get_function_metadata(function_node, blob)
+    #             docstring_summary = get_docstring_summary(docstring)
+    #
+    #             if metadata['identifier'] in JavascriptParser.BLACKLISTED_FUNCTION_NAMES:
+    #                 continue
+    #             else:
+    #                 definitions.append({
+    #                     'type': node_type,
+    #                     'identifier': metadata['identifier'],
+    #                     'parameters': metadata['parameters'],
+    #                     'function': match_from_span(function_node, blob),
+    #                     'function_tokens': tokenize_code(function_node, blob),
+    #                     'docstring': docstring,
+    #                     'docstring_summary': docstring_summary,
+    #                     'start_point': function_node.start_point,
+    #                     'end_point': function_node.end_point
+    #                 })
+    #                 # print("Function name =", metadata['identifier'])
+    #     return definitions
 
     @staticmethod
     def get_function_metadata(function_node, blob: str) -> Dict[str, str]:
