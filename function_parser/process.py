@@ -41,13 +41,13 @@ class DataProcessor:
             return indexes
         start = time.time()
         tmp_dir = download(nwo)
-        print("download time", time.time() - start)
+        # print("download time", time.time() - start)
         files = walk(tmp_dir, ext)
         # files = glob.iglob(tmp_dir.name + '/**/*.{}'.format(ext), recursive=True)
         sha = None
         start = time.time()
         for f in files:
-            print("file:", f)
+            # print("file:", f)
             definitions = self.get_function_definitions(f)
             if definitions is None:
                 continue
@@ -57,8 +57,8 @@ class DataProcessor:
             nwo, path, functions = definitions
             indexes.extend((self.extract_function_data(func, nwo, path, sha) for func in functions if
                             len(func['function_tokens']) > 1))
-            print("time taken for a file", time.time() - start)
-        print("DataProcessor.process_dee end time", time.time()-start)
+        #     print("time taken for a file", time.time() - start)
+        # print("DataProcessor.process_dee end time", time.time()-start)
         return indexes
 
     def process_dent(self, nwo, ext, library_candidates) -> Tuple[List[Dict[str, Any]], List[Tuple[str, str]]]:
@@ -172,15 +172,15 @@ class DataProcessor:
             start = time.time()
             with open(filepath) as source_code:
                 blob = source_code.read()
-            print("file open time ->", time.time()-start)
+            # print("file open time ->", time.time()-start)
             tree_start = time.time()
             # print("start time=", time.time()-start)
             tree = DataProcessor.PARSER.parse(blob.encode())
             # print("AST-tree building time->", time.time()-tree_start)
-            print("tree:-", tree.root_node.children)
+            # print("tree:-", tree.root_node.children)
             function_def_start = time.time()
             test_var = self.language_parser.get_definition(tree, blob)  # time taken high
-            print("language_parser.get_definition processing time ->", time.time() - function_def_start)
+            # print("language_parser.get_definition processing time ->", time.time() - function_def_start)
             return (nwo, path, test_var)
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError, ValueError, OSError):
             return None

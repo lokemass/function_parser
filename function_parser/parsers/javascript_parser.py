@@ -14,7 +14,7 @@ class JavascriptParser(LanguageParser):
 
     @staticmethod
     def get_docstring(tree, node, blob: str) -> str:
-        doc_time = time.time()
+        # doc_time = time.time()
         docstring = ''
         parent_node = node_parent(tree, node)
 
@@ -24,7 +24,7 @@ class JavascriptParser(LanguageParser):
             base_node = parent_node  # This is a common pattern where a function is assigned as a value to a dictionary.
         else:
             base_node = node
-        previous_sibling_time = time.time()
+        # previous_sibling_time = time.time()
         prev_sibling = previous_sibling(tree, base_node)
         if prev_sibling is not None and prev_sibling.type == 'comment':
             all_prev_comment_nodes = [prev_sibling]
@@ -48,24 +48,24 @@ class JavascriptParser(LanguageParser):
     def get_definition(tree, blob: str) -> List[Dict[str, Any]]:
         function_nodes = []
         functions = []
-        start = time.time()
+        # start = time.time()
         traverse_type(tree.root_node, function_nodes, 'function_declaration')
         # print("get_definition.traverse_type", time.time() - start)
         # print("for loop started function", time.time()-start)
-        get_definition_function_loop = time.time()
+        # get_definition_function_loop = time.time()
         for function in function_nodes:
             if function.children is None or len(function.children) == 0:
                 continue
             else:
-                parent_node_time = time.time()
+                # parent_node_time = time.time()
                 parent_node = node_parent(tree, function)
                 # print("parent node processing time", time.time() - parent_node_time)
-                print("parent Type", parent_node.type)
+                # print("parent Type", parent_node.type)
                 functions.append((parent_node.type, function, JavascriptParser.get_docstring(tree, function, blob)))
         #     print("for loop function iteration = ", time.time() - start)
-        print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
+        # print("get_definition_function_loop processing time= ", time.time() - get_definition_function_loop)
         definitions = []
-        meta_start = time.time()
+        # meta_start = time.time()
         for node_type, function_node, docstring in functions:
 
             metadata = JavascriptParser.get_function_metadata(function_node, blob)
@@ -84,8 +84,8 @@ class JavascriptParser(LanguageParser):
                 'start_point': function_node.start_point,
                 'end_point': function_node.end_point
             })
-        print("metadata processing time -> ", time.time() - meta_start)
-        print("Definitions", definitions)
+        # print("metadata processing time -> ", time.time() - meta_start)
+        # print("Definitions", definitions)
         return definitions
 
     # @staticmethod
