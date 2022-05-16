@@ -49,7 +49,7 @@ class JavascriptParser(LanguageParser):
         function_nodes = []
         functions = []
         start = time.time()
-        traverse_type(tree.root_node, function_nodes, 'function')
+        traverse_type(tree.root_node, function_nodes, 'function_declaration')
         # print("get_definition.traverse_type", time.time() - start)
         # print("for loop started function", time.time()-start)
         get_definition_function_loop = time.time()
